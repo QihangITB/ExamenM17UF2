@@ -23,21 +23,27 @@ public class CanonRotation : MonoBehaviour
     {
         //PISTA: mireu TOTES les variables i feu-les servir
 
-        /*var mousePos = //guardem posició del ratolí a la càmera
-        var direction = //vector entre el click i la bala
-        var angle = (Mathf.Atan2(dist.y, dist.x) * 180f / Mathf.PI + offset);
-        transform.rotation = Quaternion.Euler( //aplicar rotació de l'angle al canó  */
+        var mousePos =  Camera.main.ScreenToWorldPoint(Input.mousePosition); //guardem posiciï¿½ del ratolï¿½ a la cï¿½mera
+        var direction =  mousePos - this.transform.position; //vector entre el click i la bala
+        var angle = (Mathf.Atan2(direction.y, direction.x) * 180f / Mathf.PI + offset);
+
+        if (mousePos.z < _maxRotation.z && mousePos.z > _minRotation.z)
+        {
+            transform.rotation = Quaternion.Euler(0, 0, angle);
+        }
 
         if (Input.GetMouseButton(0))
         {
-            //ProjectileSpeed += //cada segon s'ha de fer 4 unitats més gran
+            ProjectileSpeed += 4 * Time.deltaTime; //cada segon s'ha de fer 4 unitats mï¿½s gran
             
         }
         if(Input.GetMouseButtonUp(0))
         {
-            //var projectile = Instantiate(Bullet, //On s'instancia?
-            //projectile.GetComponent<Rigidbody2D>().velocity = //quina velocitat ha de tenir la bala? 
-            ProjectileSpeed = 0f; //reset després del tret
+            var projectile = Instantiate(Bullet, ShootPoint.transform.position, Quaternion.identity); //On s'instancia?
+            
+            projectile.GetComponent<Rigidbody2D>().velocity = direction.normalized * ProjectileSpeed; //quina velocitat ha de tenir la bala? 
+
+            ProjectileSpeed = 0f; //reset desprï¿½s del tret
         }
         CalculateBarScale();
 
@@ -45,7 +51,7 @@ public class CanonRotation : MonoBehaviour
     public void CalculateBarScale()
     {
         PotencyBar.transform.localScale = new Vector3(Mathf.Lerp(0, initialScaleX, ProjectileSpeed / MaxSpeed),
-            PotencyBar.transform.localScale.y,
-            PotencyBar.transform.localScale.z);
+                                                    PotencyBar.transform.localScale.y,
+                                                    PotencyBar.transform.localScale.z);
     }
 }
