@@ -27,11 +27,12 @@ public class CanonRotation : MonoBehaviour
         var direction =  mousePos - this.transform.position; //vector entre el click i la bala
         var angle = (Mathf.Atan2(direction.y, direction.x) * 180f / Mathf.PI + offset);
 
-        if (mousePos.z < _maxRotation.z && mousePos.z > _minRotation.z)
-        {
-            transform.rotation = Quaternion.Euler(0, 0, angle);
-        }
 
+
+        if (angle > _maxRotation.z || angle < _minRotation.z) return;
+        
+        transform.rotation = Quaternion.Euler(0, 0, angle);
+        
         if (Input.GetMouseButton(0))
         {
             ProjectileSpeed += 4 * Time.deltaTime; //cada segon s'ha de fer 4 unitats m�s gran
@@ -42,6 +43,10 @@ public class CanonRotation : MonoBehaviour
             var projectile = Instantiate(Bullet, ShootPoint.transform.position, Quaternion.identity); //On s'instancia?
             
             projectile.GetComponent<Rigidbody2D>().velocity = direction.normalized * ProjectileSpeed; //quina velocitat ha de tenir la bala? 
+            
+            //float X = ProjectileSpeed * Mathf.Cos(angle);
+            //float Y = ProjectileSpeed * Mathf.Sin(angle);
+            //projectile.GetComponent<Rigidbody2D>().velocity = new Vector2(X,Y);
 
             ProjectileSpeed = 0f; //reset despr�s del tret
         }
