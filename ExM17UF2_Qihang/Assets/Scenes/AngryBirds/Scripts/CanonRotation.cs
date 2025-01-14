@@ -23,11 +23,9 @@ public class CanonRotation : MonoBehaviour
     {
         //PISTA: mireu TOTES les variables i feu-les servir
 
-        var mousePos =  Camera.main.ScreenToWorldPoint(Input.mousePosition); //guardem posici� del ratol� a la c�mera
-        var direction =  mousePos - this.transform.position; //vector entre el click i la bala
+        Vector2 mousePos =  Camera.main.ScreenToWorldPoint(Input.mousePosition); //guardem posici� del ratol� a la c�mera
+        Vector2 direction =  mousePos - (Vector2) this.transform.position; //vector entre el click i la bala
         var angle = (Mathf.Atan2(direction.y, direction.x) * 180f / Mathf.PI + offset);
-
-
 
         if (angle > _maxRotation.z || angle < _minRotation.z) return;
         
